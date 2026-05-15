@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
@@ -16,11 +15,20 @@ import { draftMode } from 'next/headers'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+// Додаємо можливість приймати параметри пошуку (для мови)
+export default async function RootLayout({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
   const { isEnabled } = await draftMode()
+  
+  // Для тесту фіксуємо мову 'uk'. 
+  // Пізніше ми зробимо автоматичне визначення з URL. 
+  const locale = 'uk' 
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
@@ -34,8 +42,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <Header />
+          {/* Передаємо мову в Header */}
+          <Header locale="uk" />
+          
           {children}
+          
           <Footer />
         </Providers>
       </body>
